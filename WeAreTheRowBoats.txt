@@ -1,0 +1,89 @@
+# We are the Rowboats
+# giovanni@cardona.com  2/8/2016 v1.1 2/9/2016
+use_debug false
+load_samples [:drum_heavy_kick, :drum_snare_soft]
+notes1 = (ring :D, :C, :D, :C, :D)
+notes2 = (ring :F)
+notes3 = (ring :D,:D)
+bass_octave = 2
+main_tempo = 0.52
+pitchs = [0,0,-4,-4,-7,-7]
+
+live_loop :mainBaseLine do
+  pitchs.each do |p|
+    baseline p
+  end
+end
+
+live_loop :mainMelodyLine do
+  pitchs.each do |p|
+    melody p
+  end
+end
+
+define :melody do |pitch|
+  use_synth :piano
+  play :D, pitch: pitch
+  sleep main_tempo + (main_tempo / 2)
+  play :D, pitch: pitch
+  sleep main_tempo /2
+  play :F, pitch: pitch
+  sleep main_tempo /2
+  play :D, pitch: pitch
+  sleep main_tempo + (main_tempo / 2)
+  #
+  play :F, pitch: pitch + 12
+  sleep main_tempo
+  play :G, pitch: pitch + 12
+  sleep main_tempo /2
+  play :C, pitch: pitch + 24
+  sleep main_tempo /2
+  play :A, pitch: pitch + 12
+  sleep main_tempo * 2
+end
+
+
+live_loop :drums do
+  sample :drum_heavy_kick, rate: 0.8
+  sleep main_tempo
+  sample :drum_snare_soft, rate: 0.8
+  sleep main_tempo
+  sample :drum_heavy_kick, rate: 0.8
+  sleep main_tempo /2
+  sample :drum_heavy_kick, rate: 0.8
+  sleep main_tempo /2
+  sample :drum_snare_soft, rate: 0.8
+  sleep main_tempo
+end
+
+define :baseline  do |pitch|
+  use_synth :dsaw
+  use_synth_defaults amp: 0.5, attack: 0, sustain: 0.125, release: 0.032
+  notes1.each do |n|
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+  end
+  sleep main_tempo / 2
+  notes2.each do |n|
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+  end
+  sleep main_tempo / 2
+  notes1.each do |n|
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+  end
+  notes3.each do |n|
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+    play note(n, octave: bass_octave), pitch: pitch
+    sleep main_tempo / 4
+  end
+  sleep main_tempo / 2
+end
